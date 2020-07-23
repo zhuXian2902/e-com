@@ -1,0 +1,14 @@
+/** @format */
+body {
+	font-size: 1.2rem !important;
+	margin: 0;
+}
+
+link:hover {
+	color: white !important;
+	text-decoration: none !important;
+}
+link {
+	color: white !important;
+	/* text-decoration: none !important; */
+}
