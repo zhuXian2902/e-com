@@ -9,13 +9,27 @@ class Filter {
 	filter() {
 		// console.log(this.queryString);
 		const queryDest = { ...this.queryString };
-		const excludeFields = ['limit', 'sort', 'page', 'field'];
+		const excludeFields = ['limit', 'sort', 'page', 'field', 'category'];
 		excludeFields.forEach((field) => delete queryDest[field]);
 		let queryStr = JSON.stringify(queryDest);
 		queryStr = queryStr.replace(/\b(ne|gte|lte|gt|lt)\b/g, (el) => `$${el}`);
 		const queryObj = JSON.parse(queryStr);
+		// console.log(queryObj);
 		this.query = this.query.find(queryObj);
 		// console.log(this.query, this.queryString);
+		return this;
+	}
+
+	category() {
+		if (this.queryString.category) {
+			let category = this.queryString.category;
+			category = this.queryString.category
+				// .slice(1, category.length - 1)
+				.split(',');
+
+			this.query = this.query.find({ category });
+			return this;
+		}
 		return this;
 	}
 
@@ -37,7 +51,7 @@ class Filter {
 
 	pagination() {
 		const page = this.queryString.page * 1 || 1;
-		const limit = this.queryString.limit * 1 || 11;
+		const limit = this.queryString.limit * 1 || 2;
 		const skip = (page - 1) * limit;
 		this.query = this.query.skip(skip).limit(limit);
 

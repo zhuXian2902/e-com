@@ -19,7 +19,7 @@ router.post(
 router.get('/:cid', catchAsync(categoryController.getCategory));
 
 router
-	.route('/:cid/:id')
+	.route('/:cid')
 	.patch(
 		catchAsync(authController.protect),
 		catchAsync(authController.isAllowed),

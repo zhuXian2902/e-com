@@ -6,13 +6,21 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 var transport = nodemailer.createTransport({
-	host: process.env.EMAIL_HOST,
+	host: 'smtp-relay.sendinblue.com',
 	port: process.env.EMAIL_PORT,
 	auth: {
-		user: process.env.EMAIL_USERNAME,
-		pass: process.env.EMAIL_PASSWORD,
+		user: process.env.SENDINBLUE_USERNAME,
+		pass: process.env.SENDINBLUE_PASSWORD,
 	},
 });
+
+// var transport = nodemailer.createTransport({
+// 	service: 'SendGrid',
+// 	auth: {
+// 		user: process.env.SENDGRID_USERNAME,
+// 		pass: process.env.SENDGRID_PASSWORD,
+// 	},
+// });
 
 const createToken = (id) => {
 	return jwt.sign({ id }, process.env.SECRET_JWT, {
@@ -22,6 +30,7 @@ const createToken = (id) => {
 
 exports.signup = async (req, res, next) => {
 	const { name, email, password, passwordConfirm } = req.body;
+
 	const user = await User.findOne({ email });
 	if (user)
 		return next(new AllError('account with that email already exists', 401));
@@ -31,15 +40,14 @@ exports.signup = async (req, res, next) => {
 		process.env.SECRET_JWT,
 		{ expiresIn: '10m' }
 	);
+
 	const url = `${process.env.CLIENT_URL}/auth/activate/${token}`;
 
 	const emailData = {
-		to: [
-			{
-				address: email,
-				name,
-			},
-		],
+		to: {
+			address: email,
+			name,
+		},
 		from: {
 			address: process.env.EMAIL_FROM,
 			name: 'sandy',
@@ -53,7 +61,7 @@ exports.signup = async (req, res, next) => {
      </div>
     `,
 	};
-
+	// console.log(emailData);
 	await transport.sendMail(emailData);
 
 	res.status(200).json({

@@ -15,7 +15,6 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { authenticate } from './../../utils/helpers';
-import Textarea from '@material-ui/core/TextareaAutosize';
 import { SimpleFileUpload, Select } from 'formik-material-ui';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -93,10 +92,20 @@ const validationSchema = yup.object().shape({
 		),
 });
 
+const toastOptions = {
+	position: 'top-center',
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: false,
+	draggable: false,
+	progress: undefined,
+};
+
 function AddProduct() {
 	const classes = useStyles();
 	const [categories, setCategories] = useState();
-	const [file, setFile] = useState();
+	// const [file, setFile] = useState();
 	const [buttonText, setButtonText] = useState(false);
 
 	const getCategories = async () => {
@@ -105,7 +114,11 @@ function AddProduct() {
 			setCategories(res.data.data);
 			// console.log(categories, res.data.data);
 		} catch (err) {
-			console.log(err);
+			if (err && err.response && err.response.data) {
+				toast.error(err.response.data.message, toastOptions);
+			} else {
+				toast.error('server is not running', toastOptions);
+			}
 		}
 	};
 
@@ -132,37 +145,13 @@ function AddProduct() {
 
 			setButtonText(true);
 			submitProps.resetForm();
-			toast.success('Product successfully created', {
-				position: 'top-center',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: false,
-				draggable: false,
-				progress: undefined,
-			});
+			toast.success('Product successfully created');
 			setButtonText(false);
 		} catch (err) {
 			if (err && err.response && err.response.data) {
-				toast.error(err.response.data.message, {
-					position: 'top-center',
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
+				toast.error(err.response.data.message, toastOptions);
 			} else {
-				toast.error('server is not running', {
-					position: 'top-center',
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
+				toast.error('server is not running', toastOptions);
 			}
 			setButtonText(false);
 		}
@@ -170,17 +159,7 @@ function AddProduct() {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss={false}
-				draggable={false}
-				pauseOnHover={false}
-			/>
+			<ToastContainer {...toastOptions} />
 			<Accordion>
 				<AccordionSummary
 					expandIcon={<ExpandMoreIcon />}
@@ -236,6 +215,9 @@ function AddProduct() {
 
 										<Grid item xs={12}>
 											<Field
+												margin="normal"
+												multiline
+												rows="4"
 												fullWidth
 												component={TextField}
 												variant="outlined"

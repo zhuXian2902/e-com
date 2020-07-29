@@ -33,10 +33,10 @@ exports.manageImage = async (req, res, next) => {
 	// console.log(req.file);
 	req.file.filename = `product-${req.user.id}-${Date.now()}.jpeg`;
 	await sharp(req.file.buffer)
-		.resize(500, 500)
+		.resize(2000, 2000)
 		.toFormat('jpeg')
 		.jpeg({ quality: 80 })
-		.toFile(`public/users/${req.file.filename}`);
+		.toFile(`public/products/${req.file.filename}`);
 	req.body.image = req.file.filename;
 	next();
 };
@@ -61,8 +61,12 @@ exports.similarProducts = async (req, res, next) => {
 };
 
 exports.getAllProducts = async (req, res, next) => {
-	// console.log(req.query);
-	const filterProducts = new Filter(Product.find(), req.query)
+	console.log(req.query); //["5f1974aa33d9104158203e61","5f19747633d9104158203e60"]
+	req.query.name
+		? (req.query.name = { $regex: req.query.name, $options: 'i' })
+		: req.query;
+	const filterProducts = new Filter(Product.find({}), req.query)
+		.category()
 		.filter()
 		.sort()
 		.limit()
@@ -70,12 +74,13 @@ exports.getAllProducts = async (req, res, next) => {
 	const data = await filterProducts.query
 		.populate('category', '_id name')
 		.populate('reviews');
-	res.status(201).json({
+	// const data = await Product.find({
+	// 	category: ['5f1974aa33d9104158203e61', '5f19747633d9104158203e60'],
+	// });
+	res.status(200).json({
 		status: 'success',
 		size: data.length ? data.length : 0,
-		data: {
-			data,
-		},
+		data,
 	});
 };
 
@@ -86,9 +91,7 @@ exports.createProduct = async (req, res, next) => {
 	const data = await Product.create(req.body);
 	res.status(201).json({
 		status: 'success',
-		data: {
-			data,
-		},
+		data,
 	});
 };
 
@@ -100,9 +103,7 @@ exports.getProduct = async (req, res, next) => {
 
 	res.status(200).json({
 		status: 'success',
-		data: {
-			data,
-		},
+		data,
 	});
 };
 
@@ -117,9 +118,7 @@ exports.updateProduct = async (req, res, next) => {
 
 	res.status(200).json({
 		status: 'success',
-		data: {
-			data,
-		},
+		data,
 	});
 };
 
@@ -172,8 +171,6 @@ exports.productStats = async (req, res, next) => {
 	]);
 	res.status(200).json({
 		status: 'success',
-		data: {
-			data,
-		},
+		data,
 	});
 };

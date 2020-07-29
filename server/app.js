@@ -13,6 +13,7 @@ const Product = require('./models/productModel');
 const AllError = require('./utils/error');
 const errorHandler = require('./controllers/errorController');
 const cors = require('cors');
+const path = require('path');
 
 const DB = process.env.DATABASE;
 // console.log(process.env);
@@ -40,6 +41,7 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(cors());
 }
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '1000kb' }));
 app.use('/api/v1/users', userRouter);

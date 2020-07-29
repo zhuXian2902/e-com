@@ -6,7 +6,7 @@ import { isAuth, signout } from './../../utils/helpers';
 
 const Layout = ({ children, match, history }) => {
 	// console.log(history, children, match);
-	console.log(isAuth());
+	// console.log(isAuth());
 	const isActive = (path) => {
 		if (match.path === path) {
 			return { color: '#000' };
@@ -20,6 +20,11 @@ const Layout = ({ children, match, history }) => {
 			<li className="nav-item">
 				<Link to="/" className="nav-link" style={isActive('/')}>
 					Home
+				</Link>
+			</li>
+			<li className="nav-item">
+				<Link to="/shop" className="nav-link" style={isActive('/shop')}>
+					Shop
 				</Link>
 			</li>
 			{!isAuth() && (
