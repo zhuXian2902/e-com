@@ -16,6 +16,8 @@ import PublicRoute from './PublicRoute';
 import AdminRoute from './AdminRoute';
 import { Route, Redirect } from 'react-router-dom';
 import Shop from './../components/Product/Shop';
+import Cart from './../components/Product/Cart';
+import ProductInfo from './../components/Product/ProductInfo';
 
 const Routes = () => {
 	return (
@@ -33,6 +35,8 @@ const Routes = () => {
 					<PublicRoute restricted={true} path="/signup" exact component={SignUp} />
 					<PublicRoute restricted={true} path="/signin" exact component={SignIn} />
 					<PublicRoute path="/shop" exact component={Shop} />
+					<PublicRoute path="/cart" exact component={Cart} />
+					<PublicRoute path="/products/:pid" exact component={ProductInfo} />
 					<PublicRoute restricted={false} path="/" exact component={Home} />
 				</Switch>
 			</BrowserRouter>

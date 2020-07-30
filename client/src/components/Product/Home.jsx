@@ -58,33 +58,31 @@ function DashBoard() {
 	}, []);
 
 	return (
-		<div>
-			<Header className={classes.box}>
-				<div></div>
-				<Search toastOptions={toastOptions} />
-				<ToastContainer {...toastOptions} />
-				<Container className={classes.cardGrid} maxWidth="md">
-					<Typography variant="h3">BestSeller</Typography>
-					<Grid container spacing={4}>
-						{BestSeller.map((product) => (
-							<Grid item key={product._id} xs={12} sm={6} md={4}>
-								<ProductCard product={product} />
-							</Grid>
-						))}
-					</Grid>
-				</Container>
-				<Container className={classes.cardGrid} maxWidth="md">
-					<Typography variant="h3">New Arrivals</Typography>
-					<Grid container spacing={2}>
-						{Arrival.map((product) => (
-							<Grid item key={product._id} xs={12} sm={6} md={4}>
-								<ProductCard product={product} />
-							</Grid>
-						))}
-					</Grid>
-				</Container>
-			</Header>
-		</div>
+		<Header className={classes.box}>
+			<div></div>
+			<Search toastOptions={toastOptions} />
+			<ToastContainer {...toastOptions} />
+			<Container className={classes.cardGrid} maxWidth="md">
+				<Typography variant="h3">BestSeller</Typography>
+				<Grid container spacing={4}>
+					{BestSeller.map((product) => (
+						<Grid item key={product._id} xs={12} sm={6} md={4}>
+							<ProductCard product={product} />
+						</Grid>
+					))}
+				</Grid>
+			</Container>
+			<Container className={classes.cardGrid} maxWidth="md">
+				<Typography variant="h3">New Arrivals</Typography>
+				<Grid container spacing={2}>
+					{Arrival.map((product) => (
+						<Grid item key={product._id} xs={12} sm={6} md={4}>
+							<ProductCard product={product} />
+						</Grid>
+					))}
+				</Grid>
+			</Container>
+		</Header>
 	);
 }
 

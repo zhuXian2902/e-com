@@ -55,13 +55,14 @@ exports.productInfo = async (req, res, next, val) => {
 };
 
 exports.similarProducts = async (req, res, next) => {
-	req.query.category = req.params.pid;
-	console.log(req.query, req.params);
+	req.query.category = `${req.product.category}`;
+	req.query._id = { ne: req.params.pid };
+
 	next();
 };
 
 exports.getAllProducts = async (req, res, next) => {
-	console.log(req.query); //["5f1974aa33d9104158203e61","5f19747633d9104158203e60"]
+	// console.log(req.query); //["5f1974aa33d9104158203e61","5f19747633d9104158203e60"]
 	req.query.name
 		? (req.query.name = { $regex: req.query.name, $options: 'i' })
 		: req.query;
@@ -74,9 +75,7 @@ exports.getAllProducts = async (req, res, next) => {
 	const data = await filterProducts.query
 		.populate('category', '_id name')
 		.populate('reviews');
-	// const data = await Product.find({
-	// 	category: ['5f1974aa33d9104158203e61', '5f19747633d9104158203e60'],
-	// });
+
 	res.status(200).json({
 		status: 'success',
 		size: data.length ? data.length : 0,
@@ -96,7 +95,9 @@ exports.createProduct = async (req, res, next) => {
 };
 
 exports.getProduct = async (req, res, next) => {
-	const data = await Product.findById(req.params.pid).populate('reviews');
+	const data = await Product.findById(req.params.pid)
+		.populate('reviews')
+		.populate('category', '_id name');
 	if (!data) {
 		return next(new AllError('Product not found', 404));
 	}

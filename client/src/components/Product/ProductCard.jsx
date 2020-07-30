@@ -2,15 +2,18 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import { Button } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import {
+	Button,
+	Typography,
+	Card,
+	CardMedia,
+	CardContent,
+	CardActions,
+	CardActionArea,
+} from '@material-ui/core';
+import { addItem } from './../../utils/cartHelpers';
 import { Link } from 'react-router-dom';
-// import { Link } from '@material-ui/core';
+import { toast, ToastContainer } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
 	cardGrid: {
@@ -21,21 +24,41 @@ const useStyles = makeStyles((theme) => ({
 		height: '100%',
 		display: 'flex',
 		flexDirection: 'column',
+		backgroundColor: '#f7f6f9',
 	},
 	cardMedia: {
 		paddingTop: '0%', // 16:9
+		backgroundColor: 'purple',
 	},
 	cardContent: {
 		flexGrow: 1,
 	},
 }));
 
+const toastOptions = {
+	position: 'top-center',
+	autoClose: 5000,
+	hideProgressBar: false,
+	closeOnClick: true,
+	pauseOnHover: false,
+	draggable: false,
+	progress: undefined,
+};
+
 function ProductCard({ product }) {
 	const classes = useStyles();
 	const imageUrl = process.env.REACT_APP_SERVER_IMAGE_URL;
 	const url = `${imageUrl}/products/${product.image}`;
+
+	const addToCart = () => {
+		addItem(product, () => {
+			toast.success('item added to cart successfully', toastOptions);
+		});
+	};
+
 	return (
 		<div>
+			<ToastContainer {...toastOptions} />
 			<Card className={classes.card}>
 				<CardActionArea to="/dashboard">
 					<CardMedia
@@ -49,25 +72,25 @@ function ProductCard({ product }) {
 				</CardActionArea>
 				<CardContent className={classes.cardContent}>
 					<Typography gutterBottom variant="h5" component="h2">
-						{product.name}
+						{product.name.toUpperCase()}
 					</Typography>
-					<Typography
-						height="20px"
-						variant="body2"
-						color="textSecondary"
-						component="p"
-					>
-						{product.description.substring(0, 30)}.....
+					<Typography height="20px" variant="h5" color="textSecondary" component="p">
+						{/*product.description.substring(0, 30).....*/}
+						Price ₹{product.price}
 					</Typography>
 				</CardContent>
 
 				<CardActions>
-					<Link to="/admindashboard" style={{ underline: 'none' }}>
-						<Button variant="contained" size="small" color="primary">
-							Add to Cart
-						</Button>
-					</Link>
-					<Link to="/" style={{ underline: 'none' }}>
+					<Button
+						onClick={addToCart}
+						variant="contained"
+						size="small"
+						color="primary"
+					>
+						Add to Cart
+					</Button>
+
+					<Link to={`/products/${product._id}`} style={{ underline: 'none' }}>
 						<Button variant="contained" size="small" color="primary">
 							View Details
 						</Button>

@@ -4,6 +4,7 @@ import React from 'react';
 import axios from 'axios';
 import Routes from './routes/Routes';
 import { getCookie, signout } from './utils/helpers';
+import './all.css';
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 axios.interceptors.request.use((config) => {

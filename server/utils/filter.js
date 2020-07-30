@@ -14,7 +14,7 @@ class Filter {
 		let queryStr = JSON.stringify(queryDest);
 		queryStr = queryStr.replace(/\b(ne|gte|lte|gt|lt)\b/g, (el) => `$${el}`);
 		const queryObj = JSON.parse(queryStr);
-		// console.log(queryObj);
+
 		this.query = this.query.find(queryObj);
 		// console.log(this.query, this.queryString);
 		return this;
@@ -23,9 +23,7 @@ class Filter {
 	category() {
 		if (this.queryString.category) {
 			let category = this.queryString.category;
-			category = this.queryString.category
-				// .slice(1, category.length - 1)
-				.split(',');
+			category = this.queryString.category.split(',');
 
 			this.query = this.query.find({ category });
 			return this;

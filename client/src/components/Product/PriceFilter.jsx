@@ -24,14 +24,14 @@ function PriceFilter({ handleFilter }) {
 	const handleChange = (event) => {
 		setValue(event.target.value);
 
-		let lte = 0,
-			gte = 100000,
+		let lte = 100000,
+			gte = 0,
 			idx = +event.target.value;
 		if (idx > 0) {
 			gte = priceArr[idx][0];
 			lte = priceArr[idx][1];
 		}
-		console.log(event.target.value, gte, lte);
+
 		handleFilter(event.target.value, gte, lte);
 	};
 

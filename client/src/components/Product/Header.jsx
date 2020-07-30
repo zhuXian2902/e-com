@@ -3,6 +3,18 @@
 import React, { Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { isAuth, signout } from './../../utils/helpers';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import { IconButton, withStyles, Badge } from '@material-ui/core';
+import { totalItems } from './../../utils/cartHelpers';
+
+const StyledBadge = withStyles((theme) => ({
+	badge: {
+		right: -3,
+		top: 13,
+		border: `2px solid ${theme.palette.background.paper}`,
+		padding: '0 2px',
+	},
+}))(Badge);
 
 const Layout = ({ children, match, history }) => {
 	// console.log(history, children, match);
@@ -27,6 +39,16 @@ const Layout = ({ children, match, history }) => {
 					Shop
 				</Link>
 			</li>
+			<li className="nav-item">
+				<Link to="/cart" className="nav-link" style={isActive('/shop')}>
+					<IconButton style={{ padding: 0 }} aria-label="cart">
+						<StyledBadge badgeContent={totalItems()} color="secondary">
+							<ShoppingCartOutlinedIcon />
+						</StyledBadge>
+					</IconButton>
+				</Link>
+			</li>
+
 			{!isAuth() && (
 				<>
 					<li className="nav-item">
