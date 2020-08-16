@@ -38,17 +38,17 @@ const Activate = ({ match }) => {
 			const res = await axios.post('/users/authenticate', { token });
 			authenticate(res, () => {
 				setButtonText(false);
-				// console.log('ACCOUNT ACTIVATION', res);
+				console.log('ACCOUNT ACTIVATION', res);
 				setValues({ ...values, show: false });
-				// toast.success(res.data.message, {
-				// 	position: 'top-center',
-				// 	autoClose: 5000,
-				// 	hideProgressBar: false,
-				// 	closeOnClick: true,
-				// 	pauseOnHover: true,
-				// 	draggable: true,
-				// 	progress: undefined,
-				// });
+				toast.success(res.data.message, {
+					position: 'top-center',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 				setRedirectToReferrer(true);
 			});
 		} catch (err) {

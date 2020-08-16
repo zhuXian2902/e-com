@@ -73,9 +73,11 @@ exports.signup = async (req, res, next) => {
 exports.authenticate = async (req, res, next) => {
 	// console.log(req.body, 12);
 	const { token } = req.body;
+
 	if (!token) {
 		return next(new AllError('Invalid token.', 401));
 	}
+
 	const decode = await promisify(jwt.verify)(token, process.env.SECRET_JWT);
 
 	const { name, email, password, passwordConfirm } = decode;
@@ -104,15 +106,6 @@ exports.login = async (req, res, next) => {
 
 	const token = createToken(user._id);
 
-	const cookieOptions = {
-		expires: new Date(
-			Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-		),
-		httpOnly: true,
-	};
-	if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-	user.password = undefined;
-	res.cookie('jwt', token, cookieOptions);
 	res.status(200).json({
 		status: 'success',
 		message: `Welcome back ${user.name}`,
@@ -122,8 +115,6 @@ exports.login = async (req, res, next) => {
 };
 
 exports.protect = async (req, res, next) => {
-	// console.log(req);
-
 	let token;
 	if (
 		req.headers.authorization &&
@@ -146,9 +137,9 @@ exports.protect = async (req, res, next) => {
 		return next(new AllError('user does not exist', 401));
 	}
 	// console.log(payload, userExists);
-	if (userExists.isPasswordChanged(payload.iat)) {
-		return next(new AllError('please fill correct credentials to login', 401));
-	}
+	// if (userExists.isPasswordChanged(payload.iat)) {
+	// 	return next(new AllError('please fill correct credentials to login', 401));
+	// }
 
 	req.user = userExists;
 	// console.log(req.user);
@@ -225,7 +216,7 @@ exports.resetPassword = async (req, res, next) => {
 
 	const user = await User.findById(decode._id);
 	if (!user) {
-		return next(new AllError('token is expired or invalid', 400));
+		return next(new AllError('token is expired or invalid', 401));
 	}
 
 	user.password = password;
@@ -233,5 +224,24 @@ exports.resetPassword = async (req, res, next) => {
 	await user.save();
 	res.status(200).json({
 		message: 'password changed successfully',
+	});
+};
+
+exports.updatePassword = async (req, res, next) => {
+	const { currentPassword, password, passwordConfirm } = req.body;
+
+	const user = await User.findById(req.user.id).select('+password');
+	if (!(await user.comparePassword(currentPassword, user.password))) {
+		return next(new AllError('Your current password is wrong.', 401));
+	}
+
+	user.password = password;
+	user.passwordConfirm = passwordConfirm;
+	const data = await user.save();
+	const token = createToken(user._id);
+	res.status(200).json({
+		status: 'success',
+		data,
+		token,
 	});
 };

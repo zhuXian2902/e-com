@@ -30,12 +30,15 @@ const upload = multer({
 
 exports.manageImage = async (req, res, next) => {
 	if (!req.file) return next();
-	// console.log(req.file);
+
 	req.file.filename = `product-${req.user.id}-${Date.now()}.jpeg`;
 	await sharp(req.file.buffer)
-		.resize(2000, 2000)
+		.resize(200, 200, {
+			fit: 'contain',
+			background: { r: 255, g: 255, b: 255, alpha: 0.5 },
+		})
 		.toFormat('jpeg')
-		.jpeg({ quality: 80 })
+		// .jpeg({ quality: 80 })
 		.toFile(`public/products/${req.file.filename}`);
 	req.body.image = req.file.filename;
 	next();
@@ -47,11 +50,25 @@ exports.productInfo = async (req, res, next, val) => {
 	try {
 		const product = await Product.findById(val);
 		req.product = product;
-		// console.log(product);
+
 		next();
 	} catch (err) {
 		next(err);
 	}
+};
+
+exports.updateDetails = async (req, res, next) => {
+	let options = req.body.products.map((product) => {
+		return {
+			updateOne: {
+				filter: { _id: product._id },
+				update: { $inc: { quantity: -product.count, sold: +product.count } },
+			},
+		};
+	});
+	await Product.bulkWrite(options, {});
+
+	next();
 };
 
 exports.similarProducts = async (req, res, next) => {

@@ -30,7 +30,7 @@ router
 	.get(catchAsync(productController.getAllProducts))
 	.post(
 		catchAsync(authController.protect),
-		catchAsync(authController.isAllowed),
+		authController.isAllowed,
 		productController.uploadImage,
 		catchAsync(productController.manageImage),
 		catchAsync(productController.createProduct)
@@ -43,14 +43,14 @@ router
 	.get(productController.getProduct)
 	.patch(
 		catchAsync(authController.protect),
-		catchAsync(authController.isAllowed),
+		authController.isAllowed,
 		productController.uploadImage,
 		catchAsync(productController.manageImage),
 		catchAsync(productController.updateProduct)
 	)
 	.delete(
 		catchAsync(authController.protect),
-		catchAsync(authController.isAllowed),
+		authController.isAllowed,
 		catchAsync(productController.deleteProduct)
 	);
 

@@ -10,17 +10,16 @@ axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 axios.interceptors.request.use((config) => {
 	const token = getCookie('token');
 	config.headers.Authorization = `Bearer ${token}`;
-
 	return config;
 });
 
 // null for success, and second parameter callback for failure
 axios.interceptors.response.use(null, (error) => {
-	// if (error.response.status === 401) {
-	// 	signout(() => {
-	// 		window.location.href = '/';
-	// 	});
-	// }
+	if (error.response.status === 401) {
+		signout(() => {
+			window.location.href = '/signin';
+		});
+	}
 
 	return Promise.reject(error);
 });

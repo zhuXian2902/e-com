@@ -49,10 +49,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialValues = {
-	name: 'abc',
-	email: 'abc@example.com',
-	password: '123456789',
-	passwordConfirm: '123456789',
+	name: '',
+	email: '',
+	password: '',
+	passwordConfirm: '',
 };
 
 const validationSchema = Yup.object({
@@ -63,8 +63,7 @@ const validationSchema = Yup.object({
 		.required('Required'),
 	passwordConfirm: Yup.string()
 		.required('Required')
-		.oneOf([Yup.ref('password')], 'Password does not match')
-		.required('Required'),
+		.oneOf([Yup.ref('password')], 'Password does not match'),
 });
 
 export default function SignUp(props) {

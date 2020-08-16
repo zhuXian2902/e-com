@@ -1,11 +1,9 @@
 /** @format */
 import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
+import Box from '@material-ui/core/Box';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -32,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: 'center',
 		marginTop: theme.spacing(1),
 	},
-
 	submit: {
 		margin: theme.spacing(1, 0, 1),
 	},
@@ -110,52 +107,48 @@ function AddCategory() {
 				draggable={false}
 				pauseOnHover={false}
 			/>
-			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel1a-content"
-					id="panel1a-header"
+
+			<Typography component="div" className={classes.heading}>
+				<Box fontSize={30}>Add New Category</Box>
+			</Typography>
+
+			<AccordionDetails>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={onSubmit}
+					validationSchema={validationSchema}
 				>
-					<Typography className={classes.heading}>Add New Category</Typography>
-				</AccordionSummary>
-				<AccordionDetails>
-					<Formik
-						initialValues={initialValues}
-						onSubmit={onSubmit}
-						validationSchema={validationSchema}
-					>
-						{(props) => {
-							const { isSubmitting, isValid } = props;
+					{(props) => {
+						const { isSubmitting, isValid } = props;
 
-							return (
-								<Form className={classes.form}>
-									<Field
-										autoFocus
-										variant="outlined"
-										component={TextField}
-										name="name"
-										label="Category"
-									/>
+						return (
+							<Form className={classes.form}>
+								<Field
+									autoFocus
+									variant="outlined"
+									component={TextField}
+									name="name"
+									label="Category"
+								/>
 
-									<Button
-										variant="contained"
-										color="primary"
-										className={classes.submit}
-										disabled={!isValid || buttonText}
-										type="submit"
-									>
-										{buttonText ? (
-											<CircularProgress size={24} color="secondary" />
-										) : (
-											'Submit'
-										)}
-									</Button>
-								</Form>
-							);
-						}}
-					</Formik>
-				</AccordionDetails>
-			</Accordion>
+								<Button
+									variant="contained"
+									color="primary"
+									className={classes.submit}
+									disabled={!isValid || buttonText}
+									type="submit"
+								>
+									{buttonText ? (
+										<CircularProgress size={24} color="secondary" />
+									) : (
+										'Submit'
+									)}
+								</Button>
+							</Form>
+						);
+					}}
+				</Formik>
+			</AccordionDetails>
 		</>
 	);
 }

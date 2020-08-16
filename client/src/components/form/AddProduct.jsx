@@ -160,121 +160,117 @@ function AddProduct() {
 	return (
 		<>
 			<ToastContainer {...toastOptions} />
-			<Accordion>
-				<AccordionSummary
-					expandIcon={<ExpandMoreIcon />}
-					aria-controls="panel1a-content"
-					id="panel1a-header"
+
+			<Typography component="div" className={classes.heading}>
+				<Box fontSize={30}>Add New Product</Box>
+			</Typography>
+
+			<AccordionDetails>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={onSubmit}
+					validationSchema={validationSchema}
 				>
-					<Typography className={classes.heading}>Add New Product</Typography>
-				</AccordionSummary>
-				<AccordionDetails>
-					<Formik
-						initialValues={initialValues}
-						onSubmit={onSubmit}
-						validationSchema={validationSchema}
-					>
-						{(props) => {
-							const {
-								isSubmitting,
-								isValid,
-								errors,
-								touched,
-								handleChange,
-								handleBlur,
-								setFieldValue,
-							} = props;
+					{(props) => {
+						const {
+							isSubmitting,
+							isValid,
+							errors,
+							touched,
+							handleChange,
+							handleBlur,
+							setFieldValue,
+						} = props;
 
-							return (
-								<Form className={classes.form}>
-									<Grid container spacing={2}>
-										<Grid item xs={12}>
-											<Field
-												className={classes.image}
-												fullWidth
-												component={SimpleFileUpload}
-												style={{ textDecoration: 'none', backgroundColor: 'red' }}
-												name="image"
-												label="Product Image Upload"
-												onChange={(event) => {
-													setFieldValue('image', event.currentTarget.files[0]);
-												}}
-											/>
-										</Grid>
-										<Grid item xs={12}>
-											<Field
-												component={TextField}
-												label="Product Name"
-												name="name"
-												autoComplete="name"
-												variant="outlined"
-												fullWidth
-												autoFocus
-											/>
-										</Grid>
-
-										<Grid item xs={12}>
-											<Field
-												margin="normal"
-												multiline
-												rows="4"
-												fullWidth
-												component={TextField}
-												variant="outlined"
-												label="Description"
-												name="description"
-											/>
-										</Grid>
-										<Grid item xs={12} className={classes.col}>
-											<Field
-												variant="outlined"
-												name="price"
-												label="Price"
-												component={TextField}
-											/>
-
-											<FormControl variant="outlined" className={classes.formControl}>
-												<InputLabel htmlFor="age-simple">Category</InputLabel>
-												<Field native component={Select} name="category">
-													<option aria-label="None" value="" />
-													{categories &&
-														categories.map((val, index) => (
-															<option key={val._id} value={val._id}>
-																{val.name}
-															</option>
-														))}
-												</Field>
-											</FormControl>
-
-											<Field
-												component={TextField}
-												variant="outlined"
-												name="quantity"
-												label="Qunatity"
-												autoComplete="off"
-											/>
-										</Grid>
+						return (
+							<Form className={classes.form}>
+								<Grid container spacing={2}>
+									<Grid item xs={12}>
+										<Field
+											className={classes.image}
+											fullWidth
+											component={SimpleFileUpload}
+											style={{ textDecoration: 'none', backgroundColor: 'red' }}
+											name="image"
+											label="Product Image Upload"
+											onChange={(event) => {
+												setFieldValue('image', event.currentTarget.files[0]);
+											}}
+										/>
 									</Grid>
-									<Button
-										type="submit"
-										fullWidth
-										variant="contained"
-										color="primary"
-										className={classes.submit}
-										disabled={!isValid || buttonText}
-									>
-										{buttonText ? (
-											<CircularProgress size={24} color="secondary" />
-										) : (
-											'Submit'
-										)}
-									</Button>
-								</Form>
-							);
-						}}
-					</Formik>
-				</AccordionDetails>
-			</Accordion>
+									<Grid item xs={12}>
+										<Field
+											component={TextField}
+											label="Product Name"
+											name="name"
+											autoComplete="name"
+											variant="outlined"
+											fullWidth
+											autoFocus
+										/>
+									</Grid>
+
+									<Grid item xs={12}>
+										<Field
+											margin="normal"
+											multiline
+											rows="4"
+											fullWidth
+											component={TextField}
+											variant="outlined"
+											label="Description"
+											name="description"
+										/>
+									</Grid>
+									<Grid item xs={12} className={classes.col}>
+										<Field
+											variant="outlined"
+											name="price"
+											label="Price"
+											component={TextField}
+										/>
+
+										<FormControl variant="outlined" className={classes.formControl}>
+											<InputLabel htmlFor="age-simple">Category</InputLabel>
+											<Field native component={Select} name="category">
+												<option aria-label="None" value="" />
+												{categories &&
+													categories.map((val, index) => (
+														<option key={val._id} value={val._id}>
+															{val.name}
+														</option>
+													))}
+											</Field>
+										</FormControl>
+
+										<Field
+											component={TextField}
+											variant="outlined"
+											name="quantity"
+											label="Qunatity"
+											autoComplete="off"
+										/>
+									</Grid>
+								</Grid>
+								<Button
+									type="submit"
+									fullWidth
+									variant="contained"
+									color="primary"
+									className={classes.submit}
+									disabled={!isValid || buttonText}
+								>
+									{buttonText ? (
+										<CircularProgress size={24} color="secondary" />
+									) : (
+										'Submit'
+									)}
+								</Button>
+							</Form>
+						);
+					}}
+				</Formik>
+			</AccordionDetails>
 		</>
 	);
 }

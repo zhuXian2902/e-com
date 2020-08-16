@@ -10,6 +10,7 @@ import Activate from '../components/user/Activate';
 // import Forgot from "../components/Forgot";
 // import Reset from "../components/Reset";
 import UserDashboard from '../components/user/UserDashboard';
+import DashBoard from '../components/user/DashBoard';
 import AdminDashboard from '../components/user/AdminDashboard';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -38,6 +39,7 @@ const Routes = () => {
 					<PublicRoute path="/cart" exact component={Cart} />
 					<PublicRoute path="/products/:pid" exact component={ProductInfo} />
 					<PublicRoute restricted={false} path="/" exact component={Home} />
+					<PrivateRoute path="/dashboard" exact component={DashBoard} />
 				</Switch>
 			</BrowserRouter>
 		</div>

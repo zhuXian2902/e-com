@@ -220,7 +220,7 @@ function Search({ toastOptions }) {
 					renderInput={(params) => (
 						<TextField
 							{...params}
-							label="Search your products here"
+							label="Search products"
 							// variant="outlined"
 							InputProps={{
 								...params.InputProps,

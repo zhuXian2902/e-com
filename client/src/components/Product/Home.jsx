@@ -8,6 +8,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Loading from './Loading';
 
 const toastOptions = {
 	position: 'top-center',
@@ -36,30 +37,35 @@ function DashBoard() {
 
 	const [BestSeller, setBestSeller] = useState([]);
 	const [Arrival, setArrival] = useState([]);
+	const [open, setOpen] = React.useState(false);
 
 	const getProducts = async (sortBy) => {
 		try {
-			const res = await axios.get(`/products?sort=-${sortBy}&limit=4`);
+			setOpen(true);
+			const res = await axios.get(`/products?sort=-${sortBy}&limit=6`);
 			sortBy === 'updatedAt'
 				? setArrival(res.data.data)
 				: setBestSeller(res.data.data);
+			setOpen(false);
 		} catch (err) {
 			if (err && err.response && err.response.data) {
 				toast.error(err.response.data.message, toastOptions);
 			} else {
 				toast.error('server is not running', toastOptions);
 			}
+			setOpen(false);
 		}
 	};
 
 	useEffect(() => {
-		getProducts('quantity');
+		getProducts('sold');
 		getProducts('updatedAt');
 	}, []);
 
 	return (
-		<Header className={classes.box}>
-			<div></div>
+		<>
+			<Header className={classes.box} />
+			<Loading open={open} />
 			<Search toastOptions={toastOptions} />
 			<ToastContainer {...toastOptions} />
 			<Container className={classes.cardGrid} maxWidth="md">
@@ -82,7 +88,7 @@ function DashBoard() {
 					))}
 				</Grid>
 			</Container>
-		</Header>
+		</>
 	);
 }
 

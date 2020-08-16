@@ -5,15 +5,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { TextField } from 'formik-material-ui';
-
 import Checkbox from '@material-ui/core/Checkbox';
-
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
 import Header from './../Product/Header';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -47,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialValues = {
-	email: 'ram@gmail.com',
-	password: 'password',
+	email: '',
+	password: '',
 };
 
 const validationSchema = Yup.object({

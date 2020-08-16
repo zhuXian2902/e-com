@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 	cardMedia: {
 		paddingTop: '0%', // 16:9
 		backgroundColor: 'purple',
+		height: '250px',
+		weidth: '250px',
 	},
 	cardContent: {
 		flexGrow: 1,

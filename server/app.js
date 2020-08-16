@@ -9,6 +9,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const productRouter = require('./routes/productRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
+const orderRouter = require('./routes/orderRoutes');
 const Product = require('./models/productModel');
 const AllError = require('./utils/error');
 const errorHandler = require('./controllers/errorController');
@@ -48,6 +49,7 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/orders', orderRouter);
 
 app.all('*', (req, res, next) => {
 	// const err = new Error(`${req.originalUrl} not found`);

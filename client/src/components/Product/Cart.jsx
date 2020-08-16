@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Fab from '@material-ui/core/Fab';
 import CreditCard from '@material-ui/icons/CreditCard';
+import { toast, ToastContainer } from 'react-toastify';
 import Close from '@material-ui/icons/Close';
 import Layout, {
 	Root,
@@ -30,6 +31,17 @@ import Header from './Header';
 import DailyCart from './DailyCart';
 import DailySummary from './DailySummary';
 import { getCartItems, getTotalItems } from './../../utils/cartHelpers';
+import Checkout from './Checkout';
+
+const toastOptions = {
+	position: 'top-center',
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: false,
+	draggable: false,
+	progress: undefined,
+};
 
 // const Header = getHeader(styled);
 const Content = getContent(styled);
@@ -40,9 +52,6 @@ const InsetFooter = getInsetFooter(styled);
 const InsetContainer = getInsetContainer(styled);
 
 const useStyles = makeStyles(({ breakpoints }) => ({
-	header: {
-		backgroundColor: '#ffffff',
-	},
 	toolbar: {},
 	edgeSidebarBody: {
 		padding: '24px 0 40px 24px !important',
@@ -117,12 +126,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 const ShoppingCartDemo = () => {
 	const styles = useStyles();
 	const scheme = Layout();
-	scheme.configureHeader((builder) => {
-		builder.create('appHeader').registerConfig('xs', {
-			position: 'relative',
-			initialHeight: 64,
-		});
-	});
+
 	scheme.configureInsetSidebar((builder) => {
 		builder
 			.create('insetSidebar', { anchor: 'right' })
@@ -149,7 +153,9 @@ const ShoppingCartDemo = () => {
 	}, [isChange]);
 
 	return (
-		<Fullscreen style={{ height: 'auto' }}>
+		<Fullscreen>
+			<ToastContainer {...toastOptions} />
+			<Header style={{ backgroundColor: '#3f51b5' }} />
 			<Root theme={dailyShoppingTheme} scheme={scheme}>
 				{({ setOpen, state: { sidebar } }) => {
 					const { open } = sidebar.edgeSidebar;
@@ -163,12 +169,12 @@ const ShoppingCartDemo = () => {
 							>
 								{open ? <Close /> : <CreditCard />}
 							</Fab>
-							<Header className={styles.header}></Header>
+
 							<DrawerSidebar
 								PaperProps={{ className: styles.edgeSidebarBody }}
 								sidebarId={'edgeSidebar'}
 							>
-								<DailyCheckout />
+								<Checkout setChange={setChange} isChange={isChange} total={total} />
 							</DrawerSidebar>
 							<Content>
 								<InsetContainer
@@ -178,7 +184,12 @@ const ShoppingCartDemo = () => {
 											sidebarId={'insetSidebar'}
 											classes={{ paper: styles.sidebarBody }}
 										>
-											<DailyCheckout style={{ marginTop: '20px' }} />
+											<Checkout
+												setChange={setChange}
+												isChange={isChange}
+												total={total}
+												style={{ marginTop: '20px' }}
+											/>
 										</InsetSidebar>
 									}
 								>

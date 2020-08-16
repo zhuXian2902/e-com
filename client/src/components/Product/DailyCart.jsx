@@ -147,7 +147,7 @@ const DailyCart = (props) => {
 					</TableHead>
 					<TableBody>
 						{items.map((item) => (
-							<TableRow key={item.name}>
+							<TableRow key={item._id}>
 								<TableCell component="th" scope="row">
 									<Box display={'flex'} alignItems={'center'}>
 										<Box width={80} height={80}>
@@ -180,7 +180,7 @@ const DailyCart = (props) => {
 										</IconButton>
 									</div>
 								</TableCell>
-								<TableCell>{item.price * item.count}</TableCell>
+								<TableCell>{item.price && item.price * item.count}</TableCell>
 								<TableCell>
 									<IconButton onClick={(e) => handleCount('remove', item._id)}>
 										<Close />

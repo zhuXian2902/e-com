@@ -16,7 +16,10 @@ const duplicateError = (err) => {
 			400
 		);
 	} else {
-		return new AllError(`this value already exist in database`, 400);
+		return new AllError(
+			`this value already exist in database or one user can create only one review for this product`,
+			400
+		);
 	}
 };
 

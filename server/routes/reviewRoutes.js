@@ -6,6 +6,8 @@ const authController = require('./../controllers/authController');
 const catchAsync = require('./../utils/catchAsync');
 const router = express.Router({ mergeParams: true });
 
+router.get('/ratings', catchAsync(reviewController.ratingsAverage));
+
 router.use(authController.protect);
 
 router

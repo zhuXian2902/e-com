@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
 	btn: {
@@ -87,9 +88,11 @@ const DailySummary = ({ total }) => {
 				</Grid>
 			</Grid>
 			<Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
-				<Button className={styles.btn} startIcon={<KeyboardArrowLeft />}>
-					Continue Shopping
-				</Button>
+				<Link to="/shop">
+					<Button className={styles.btn} startIcon={<KeyboardArrowLeft />}>
+						Continue Shopping
+					</Button>
+				</Link>
 			</Grid>
 		</Grid>
 	);

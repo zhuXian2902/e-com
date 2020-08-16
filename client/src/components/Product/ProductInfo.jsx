@@ -4,11 +4,17 @@ import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles, Typography } from '@material-ui/core';
+import { makeStyles, Typography, Container, Box } from '@material-ui/core';
+import Rating from '@material-ui/lab/Rating';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Header from './Header';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { addItem } from './../../utils/cartHelpers';
+import AddReviews from './AddReviews';
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange } from '@material-ui/core/colors';
+import Loading from './Loading';
 
 const toastOptions = {
 	position: 'top-center',
@@ -22,7 +28,24 @@ const toastOptions = {
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		// height: '100vh',
+		display: 'flex',
+		flexDirection: 'row',
+		margin: '40px',
+	},
+	orange: {
+		color: theme.palette.getContrastText(deepOrange[500]),
+		backgroundColor: deepOrange[500],
+		width: theme.spacing(12),
+		height: theme.spacing(12),
+		fontSize: '80px',
+	},
+	box: {
+		display: 'flex',
+		flexDirection: 'row',
+		[theme.breakpoints.down('xs')]: {
+			flexDirection: 'column',
+			justifyContent: 'center',
+		},
 	},
 }));
 
@@ -34,31 +57,90 @@ export default function ProductInfo(props) {
 	// const imageUrl = `${url}/products/${product.image}`;
 	const [product, setProduct] = useState({});
 	const [similarProducts, setSimilarProducts] = useState([]);
+	const [reviews, setReviews] = useState([]);
+	const [open, setOpen] = React.useState(false);
+	const [num, setNum] = React.useState(0);
+	const [change, setChange] = React.useState(false);
+	const [rating, setRating] = React.useState(0);
+	const [loading, setLoading] = React.useState(false);
+
+	const handleClickOpen = (id) => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	const relatedProducts = async (pid) => {
-		const products = await axios.get(`/products/similar-products/${pid}`);
-		setSimilarProducts(products.data.data);
+		if (pid) {
+			const products = await axios.get(`/products/similar-products/${pid}`);
+			setSimilarProducts(products.data.data);
+		}
 	};
 
 	const getProducts = async (pid) => {
-		try {
-			const res = await axios.get(`/products/${pid}`);
-			setProduct(res.data.data);
-			relatedProducts(pid);
+		if (pid) {
+			try {
+				setLoading(true);
+				const res = await axios.get(`/products/${pid}`);
+				setProduct(res.data.data);
+				relatedProducts(pid);
+				setLoading(false);
+				// console.log(res.data.data);
+			} catch (err) {
+				if (err && err.response && err.response.data) {
+					toast.error(err.response.data.message, toastOptions);
+				} else {
+					toast.error('server is not running', toastOptions);
+				}
+				setLoading(false);
+			}
+		}
+	};
 
-			console.log(res.data.data);
-		} catch (err) {
-			if (err && err.response && err.response.data) {
-				toast.error(err.response.data.message, toastOptions);
-			} else {
-				toast.error('server is not running', toastOptions);
+	const getReviews = async (pid) => {
+		if (pid) {
+			try {
+				setLoading(true);
+				const res = await axios.get(`/products/${pid}/reviews`);
+				setReviews(res.data.data);
+				setLoading(false);
+				// console.log(res.data.data);
+			} catch (err) {
+				if (err && err.response && err.response.data) {
+					toast.error(err.response.data.message, toastOptions);
+				} else {
+					toast.error('server is not running', toastOptions);
+				}
+				setLoading(false);
+			}
+		}
+	};
+
+	const getRatings = async (pid) => {
+		if (pid !== undefined) {
+			try {
+				setLoading(true);
+				const res = await axios.get(`/products/${pid}/reviews/ratings`);
+				setRating(res.data.stats[0].avgRating);
+				setNum(res.data.stats[0].num);
+				// console.log(res.data.stats);
+				setLoading(false);
+			} catch (err) {
+				if (err && err.response && err.response.data) {
+					toast.error(err.response.data.message, toastOptions);
+				}
+				setLoading(false);
 			}
 		}
 	};
 
 	useEffect(() => {
 		getProducts(pid);
-	}, [pid]);
+		getReviews(pid);
+		getRatings(pid);
+	}, [pid, change]);
 
 	const addToCart = () => {
 		addItem(product, () => {
@@ -67,26 +149,30 @@ export default function ProductInfo(props) {
 	};
 
 	return (
-		<Header>
+		<>
+			<Header />
+			<Loading open={loading} />
 			<ToastContainer {...toastOptions} />
-			<main className="mt-5 pt-4">
-				<div className="container dark-grey-text mt-5">
-					<div className="row wow fadeIn">
+			<main className="mt-3">
+				<div className="container dark-grey-text">
+					<div className="row">
 						<div className="col-md-6 mb-4">
 							<img
 								src={`${url}/products/${product.image}`}
 								className="img-fluid"
 								alt="Product image"
+								style={{ height: '450px' }}
 							/>
 						</div>
 
 						<div className="col-md-6 mb-4">
 							<div className="p-4">
 								<p className="lead font-weight-bold">{product.name}</p>
+								<Box component="fieldset" mb={1} borderColor="transparent">
+									<Typography component="legend">Ratings</Typography>
+									<Rating name="read-only" value={rating} readOnly /> by {num} users
+								</Box>
 								<p className="lead">
-									<span className="mr-1">
-										<del>$200</del>
-									</span>
 									<span>₹{product.price}</span>
 								</p>
 								<p>
@@ -111,13 +197,32 @@ export default function ProductInfo(props) {
 										className="form-control"
 										style="width: 100px"
                   />*/}
+								{product.quantity <= 0 ? (
+									<button
+										disabled
+										className="btn btn-danger btn-md my-0 p"
+										type="submit"
+									>
+										Add to cart
+										<AddShoppingCartIcon style={{ margin: '0 10px' }} />
+									</button>
+								) : (
+									<button
+										onClick={addToCart}
+										className="btn btn-primary btn-md my-0 p"
+										type="submit"
+									>
+										Add to cart
+										<AddShoppingCartIcon style={{ margin: '0 10px' }} />
+									</button>
+								)}
 								<button
-									onClick={addToCart}
+									style={{ marginLeft: '20px' }}
+									onClick={handleClickOpen}
 									className="btn btn-primary btn-md my-0 p"
 									type="submit"
 								>
-									Add to cart
-									<i className="fas fa-shopping-cart ml-1"></i>
+									Add Review
 								</button>
 							</div>
 						</div>
@@ -125,20 +230,75 @@ export default function ProductInfo(props) {
 				</div>
 			</main>
 			<hr />
-			<Grid container component="main" className={classes.root}>
-				<CssBaseline />
-				<Typography variant="h4" style={{ paddingBottom: '20px' }}>
-					Related Products
-				</Typography>
-				<Grid container spacing={4}>
-					{similarProducts.map((product) => (
-						<Grid item key={product._id} xs={12} sm={6} md={4}>
-							<ProductCard product={product} />
-						</Grid>
+
+			<CssBaseline />
+			{similarProducts.length > 0 && (
+				<Container className={classes.cardGrid} maxWidth="md">
+					<Typography variant="h4" style={{ paddingBottom: '20px' }}>
+						Related Products
+					</Typography>
+					<Grid container spacing={4}>
+						{similarProducts.map((product) => (
+							<Grid item key={product._id} xs={12} sm={6} md={4}>
+								<ProductCard product={product} />
+							</Grid>
+						))}
+					</Grid>
+				</Container>
+			)}
+
+			<hr />
+			<Typography
+				variant="h4"
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+					paddingBottom: '20px',
+				}}
+			>
+				Product Reviews
+			</Typography>
+			<Container className={classes.cardGrid} maxWidth="md">
+				<Grid item>
+					{reviews.map((review) => (
+						<Box key={review._id} mb={5} className={classes.box}>
+							<Grid item sm={3} style={{ display: 'flex', justifyContent: 'center' }}>
+								<Avatar
+									alt={review.user.name}
+									src="/broken-image.jpg"
+									className={classes.orange}
+								/>
+							</Grid>
+							<Grid
+								item
+								sm={9}
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<Typography>{review.user.name}</Typography>
+								<Rating name="read-only" value={review.rating} readOnly />
+								<Typography variant="h6">{review.createdAt}</Typography>
+								<Typography variant="h6">{review.review}</Typography>
+							</Grid>
+						</Box>
 					))}
 				</Grid>
-			</Grid>
-		</Header>
+			</Container>
+
+			{open && (
+				<AddReviews
+					change={change}
+					setChange={setChange}
+					open={open}
+					handleClose={handleClose}
+					id={pid}
+				/>
+			)}
+		</>
 	);
 }
 

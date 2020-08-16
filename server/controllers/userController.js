@@ -31,9 +31,9 @@ exports.manageImage = async (req, res, next) => {
 	if (!req.file) return next();
 	req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 	await sharp(req.file.buffer)
-		.resize(500, 500)
+		// .resize(800, 800)
 		.toFormat('jpeg')
-		.jpeg({ quality: 80 })
+		// .jpeg({ quality: 80 })
 		.toFile(`public/users/${req.file.filename}`);
 	next();
 };
@@ -45,8 +45,30 @@ exports.getMe = (req, res, next) => {
 	next();
 };
 
+exports.addHistory = async (req, res, next) => {
+	let history = [];
+	req.body.products.forEach((product) => {
+		history.push({
+			transactionId: req.body.transactionId,
+			id: product._id,
+			category: product.category.name,
+			name: product.name,
+			description: product.description,
+			quantity: product.count,
+			price: req.body.amount,
+		});
+	});
+
+	await User.findByIdAndUpdate(
+		req.user.id,
+		{ $push: { history } },
+		{ new: true }
+	);
+
+	next();
+};
+
 exports.updateProfile = async (req, res, next) => {
-	console.log(req.file, req.body);
 	if (req.body.password || req.body.confirmPassword) {
 		return new AllError('Password updates are not allowed from this route.', 400);
 	}
@@ -59,9 +81,18 @@ exports.updateProfile = async (req, res, next) => {
 	});
 	res.status(200).json({
 		status: 'success',
-		data: {
-			data,
-		},
+		data,
+	});
+};
+
+exports.getHistory = async (req, res, next) => {
+	const user = await User.findById(req.user._id);
+	// console.log(user);
+	const data = user.history;
+
+	res.status(200).json({
+		status: 'success',
+		data,
 	});
 };
 
