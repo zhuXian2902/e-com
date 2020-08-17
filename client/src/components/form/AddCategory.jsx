@@ -53,7 +53,7 @@ function AddCategory() {
 			submitProps.setSubmitting(false);
 			setButtonText(true);
 			const { name } = values;
-			console.log(values);
+
 			const res = await axios.post(`/category`, { name });
 
 			setButtonText(true);

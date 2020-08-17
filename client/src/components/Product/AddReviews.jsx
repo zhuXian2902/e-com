@@ -83,7 +83,7 @@ export default function SignIn({ change, setChange, id, handleClose, open }) {
 		try {
 			setButtonText(true);
 			const { review } = values;
-			console.log(review, rating);
+
 			const res = await axios.post(`/products/${id}/reviews`, {
 				rating,
 				review,

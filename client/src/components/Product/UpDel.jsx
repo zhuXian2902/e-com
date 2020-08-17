@@ -19,6 +19,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Chip from '@material-ui/core/Chip';
 import Loading from './Loading';
 import UpdateProduct from './../form/UpdateProduct';
+import { toast, ToastContainer } from 'react-toastify';
 
 const useRowStyles = makeStyles((theme) => ({
 	root: {
@@ -27,6 +28,16 @@ const useRowStyles = makeStyles((theme) => ({
 		},
 	},
 }));
+
+const toastOptions = {
+	position: 'top-center',
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: false,
+	draggable: false,
+	progress: undefined,
+};
 
 function UpDel() {
 	const [products, setProducts] = useState([]);
@@ -52,13 +63,30 @@ function UpDel() {
 
 	const deleteProduct = async (id) => {
 		try {
-			// setLoading(true);
+			setLoading(true);
 			const res = await axios.delete(`products/${id}`);
 			setChange(!change);
 			getProducts();
-			// setLoading(false);
+			setLoading(false);
+			toast.success('product deleted successfully', {
+				position: 'top-center',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (err) {
-			console.log(err);
+			toast.error(err.response.data.message, {
+				position: 'top-center',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		}
 	};
 

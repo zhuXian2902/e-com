@@ -38,7 +38,7 @@ const Activate = ({ match }) => {
 			const res = await axios.post('/users/authenticate', { token });
 			authenticate(res, () => {
 				setButtonText(false);
-				console.log('ACCOUNT ACTIVATION', res);
+
 				setValues({ ...values, show: false });
 				toast.success(res.data.message, {
 					position: 'top-center',
@@ -52,7 +52,6 @@ const Activate = ({ match }) => {
 				setRedirectToReferrer(true);
 			});
 		} catch (err) {
-			console.log('ACCOUNT ACTIVATION ERROR', err.response.data.error);
 			toast.error(err.response.data.message, {
 				position: 'top-center',
 				autoClose: 5000,

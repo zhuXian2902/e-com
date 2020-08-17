@@ -111,18 +111,15 @@ function Search({ toastOptions }) {
 		try {
 			e.preventDefault();
 			setIsSearch(true);
-			console.log(search);
+
 			let queryString = ``;
 			if (search.length > 0) queryString = `name=${search}`;
-			console.log(queryString);
+
 			const res = await axios.get(`/products?category=${category}&${queryString}`);
 			setSearchResults(res.data.data);
 			setSearch('');
-			console.log(res.data.data);
 		} catch (err) {
-			console.log(err);
 			if (err && err.response && err.response.data) {
-				console.log(1);
 				toast.error(err.response.data.message, toastOptions);
 			} else {
 				toast.error('server is not running', toastOptions);
@@ -143,7 +140,6 @@ function Search({ toastOptions }) {
 		(async () => {
 			const result = await axios.get(`/products?category=${category}`);
 			const res = result.data.data;
-			console.log(res);
 			if (active) {
 				setOptions(res);
 			}

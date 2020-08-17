@@ -58,7 +58,7 @@ function Order() {
 	const getOrders = async () => {
 		try {
 			const res = await axios.get('/users/history');
-			console.log(res.data.data);
+
 			setOrder(res.data.data);
 		} catch (err) {
 			if (err && err.response && err.response.data) {

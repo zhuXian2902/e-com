@@ -72,7 +72,6 @@ export default function SignUp(props) {
 
 	const onSubmit = async (values, submitProps) => {
 		try {
-			console.log(submitProps.isSubmitting);
 			submitProps.setSubmitting(false);
 			setButtonText(true);
 			const { name, email, password, passwordConfirm } = values;
@@ -83,8 +82,7 @@ export default function SignUp(props) {
 				password,
 				passwordConfirm,
 			});
-			console.log(res);
-			console.log(submitProps.isSubmitting);
+
 			submitProps.resetForm();
 			toast.success(res.data.message, {
 				position: 'top-center',
@@ -122,8 +120,6 @@ export default function SignUp(props) {
 			setButtonText(false);
 		}
 	};
-
-	console.log(initialValues);
 
 	return (
 		<div>

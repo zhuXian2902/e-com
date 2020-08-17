@@ -128,7 +128,7 @@ export default function SignUp(props) {
 			formData.append('image', values.image);
 			submitProps.setSubmitting(false);
 			setButtonText(true);
-			console.log(formData.get('name'), formData.get('image'));
+			// console.log(formData.get('name'), formData.get('image'));
 			const { name, email, address, image } = values;
 
 			const res = await axios.patch(`/users/updateProfile`, formData);

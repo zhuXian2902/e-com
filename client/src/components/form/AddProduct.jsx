@@ -128,7 +128,6 @@ function AddProduct() {
 
 	const onSubmit = async (values, submitProps) => {
 		try {
-			console.log(values);
 			let formData = new FormData();
 
 			formData.append('name', values.name);

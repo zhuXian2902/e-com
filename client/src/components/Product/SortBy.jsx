@@ -16,7 +16,6 @@ function PriceFilter({ handleFilter }) {
 
 	const handleChange = (event) => {
 		setValue(event.target.value);
-		console.log(event.target.value);
 		handleFilter(event.target.value);
 	};
 

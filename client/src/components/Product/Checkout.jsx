@@ -71,7 +71,7 @@ const Checkout = ({ total, isChange, setChange }) => {
 			const data = { amount, nonce };
 			setOpen(true);
 			const response = await axios.post('orders/braintree/payment', data);
-			console.log(response);
+
 			const orderData = {
 				products: getCartItems()[0],
 				itemCount: getCartItems()[1],
@@ -79,7 +79,7 @@ const Checkout = ({ total, isChange, setChange }) => {
 				amount: response.data.transaction.amount,
 				transactionId: response.data.transaction.id,
 			};
-			console.log(orderData);
+
 			const order = await axios.post('/orders', orderData);
 			emptyCart(() => {
 				toast.success('your payment has been successfully completed', toastOptions);

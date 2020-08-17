@@ -43,6 +43,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+console.log(__dirname);
+app.use(express.static(path.join(__dirname, '../client/build')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '1000kb' }));
 app.use('/api/v1/users', userRouter);
@@ -50,6 +53,9 @@ app.use('/api/v1/products', productRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/orders', orderRouter);
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
 app.all('*', (req, res, next) => {
 	// const err = new Error(`${req.originalUrl} not found`);

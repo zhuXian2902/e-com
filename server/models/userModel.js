@@ -76,7 +76,7 @@ userSchema.methods.comparePassword = async (
 
 userSchema.methods.isPasswordChanged = function (issueTime) {
 	const updateTime = parseInt(this.updatedAt.getTime() / 1000);
-	console.log(updateTime);
+
 	return updateTime > issueTime;
 };
 

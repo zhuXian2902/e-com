@@ -116,7 +116,6 @@ const DailyCart = (props) => {
 	const imageUrl = process.env.REACT_APP_SERVER_IMAGE_URL;
 
 	const handleCount = (type, id, val) => {
-		console.log(val, id);
 		if (type === 'remove') {
 			removeItem(id);
 		} else {

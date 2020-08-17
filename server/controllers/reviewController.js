@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 exports.ratingsAverage = async (req, res, next) => {
 	let pid = mongoose.Types.ObjectId(req.params.pid);
-	console.log(pid);
+
 	const stats = await Review.aggregate([
 		{
 			$match: { product: pid },
@@ -19,7 +19,7 @@ exports.ratingsAverage = async (req, res, next) => {
 			},
 		},
 	]);
-	console.log(stats);
+
 	res.status(200).json({
 		status: 'success',
 		stats,
@@ -39,7 +39,6 @@ exports.getAllReviews = async (req, res, next) => {
 };
 
 exports.createReview = async (req, res, next) => {
-	console.log(req.body);
 	req.body.product = req.params.pid;
 	req.body.user = req.user.id;
 	const data = await Review.create(req.body);
