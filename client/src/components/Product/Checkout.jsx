@@ -82,7 +82,10 @@ const Checkout = ({ total, isChange, setChange }) => {
 
 			const order = await axios.post('/orders', orderData);
 			emptyCart(() => {
-				toast.success('your payment has been successfully completed', toastOptions);
+				toast.success(
+					'your payment has been successfully completed.a confirmation mail is sent to your mail.',
+					toastOptions
+				);
 				setOpen(false);
 				setChange(!isChange);
 			});

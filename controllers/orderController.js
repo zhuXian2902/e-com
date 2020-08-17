@@ -73,7 +73,7 @@ exports.createOrder = async (req, res, next) => {
 		subject: `order recieved mail`,
 		html: `
      <div>
-      <h1>We have received your order. Please check details on your dashboard</h1>  
+      <h1>We have received your order. Please check details of order on your dashboard</h1>  
       <a href="${url}" target="_blank" >${url}</a>
      </div>
     `,
