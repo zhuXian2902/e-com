@@ -1,9 +1,9 @@
 /** @format */
 
 const express = require('express');
-const userController = require('./../controllers/userController');
-const authController = require('./../controllers/authController');
-const catchAsync = require('./../utils/catchAsync');
+const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
+const catchAsync = require('../utils/catchAsync');
 
 const router = express.Router();
 

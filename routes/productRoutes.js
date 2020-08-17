@@ -1,11 +1,11 @@
 /** @format */
 
 const express = require('express');
-const productController = require('./../controllers/productController');
-const userController = require('./../controllers/userController');
+const productController = require('../controllers/productController');
+const userController = require('../controllers/userController');
 const reviewRouter = require('./reviewRoutes');
-const authController = require('./../controllers/authController');
-const catchAsync = require('./../utils/catchAsync');
+const authController = require('../controllers/authController');
+const catchAsync = require('../utils/catchAsync');
 
 const router = express.Router();
 

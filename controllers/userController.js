@@ -1,6 +1,6 @@
 /** @format */
-const AllError = require('./../utils/error');
-const User = require('./../models/userModel');
+const AllError = require('../utils/error');
+const User = require('../models/userModel');
 const multer = require('multer');
 const sharp = require('sharp');
 

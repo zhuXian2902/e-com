@@ -1,9 +1,9 @@
 /** @format */
 
 const express = require('express');
-const reviewController = require('./../controllers/reviewController');
-const authController = require('./../controllers/authController');
-const catchAsync = require('./../utils/catchAsync');
+const reviewController = require('../controllers/reviewController');
+const authController = require('../controllers/authController');
+const catchAsync = require('../utils/catchAsync');
 const router = express.Router({ mergeParams: true });
 
 router.get('/ratings', catchAsync(reviewController.ratingsAverage));

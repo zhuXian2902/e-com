@@ -1,7 +1,7 @@
 /** @format */
 
 const express = require('express');
-const categoryController = require('./../controllers/categoryController');
+const categoryController = require('../controllers/categoryController');
 const authController = require('../controllers/authController');
 const catchAsync = require('../utils/catchAsync');
 

@@ -160,7 +160,6 @@ export default function ProductInfo(props) {
 							<img
 								src={`${url}/products/${product.image}`}
 								className="img-fluid"
-								alt="Product image"
 								style={{ height: '450px' }}
 							/>
 						</div>

@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router-dom';
-import { authenticate, isAuth } from './../../utils/helpers';
+import { authenticate } from './../../utils/helpers';
 
 const Activate = ({ match }) => {
 	const [values, setValues] = useState({
