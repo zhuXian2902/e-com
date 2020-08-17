@@ -246,7 +246,7 @@ function AddProduct() {
 											component={TextField}
 											variant="outlined"
 											name="quantity"
-											label="Qunatity"
+											label="Quantity"
 											autoComplete="off"
 										/>
 									</Grid>

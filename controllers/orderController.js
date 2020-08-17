@@ -61,6 +61,7 @@ exports.createOrder = async (req, res, next) => {
 	// console.log(req.body);
 	const order = await Order.create(req.body);
 	// console.log(order);
+	const url = `${process.env.CLIENT_URL}/userdashboard`;
 	const emailData = {
 		to: {
 			address: req.user.email,
@@ -72,7 +73,8 @@ exports.createOrder = async (req, res, next) => {
 		subject: `order recieved mail`,
 		html: `
      <div>
-      <h1>We have received your order. Please check details on yout dashboard</h1>  
+      <h1>We have received your order. Please check details on your dashboard</h1>  
+      <a href="${url}" target="_blank" >${url}</a>
      </div>
     `,
 	};
