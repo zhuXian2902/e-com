@@ -17,7 +17,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Redirect } from 'react-router-dom';
 import { authenticate, isAuth } from './../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,54 +40,41 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-	dis: {
-		display: 'flex',
-		justifyContent: 'space-between',
-	},
 }));
 
 const initialValues = {
-	currentPassword: '',
-	password: '',
-	passwordConfirm: '',
+	email: '',
 };
 
 const validationSchema = Yup.object({
-	currentPassword: Yup.string().required('Required'),
-	password: Yup.string('').required('Required'),
-	passwordConfirm: Yup.string('')
-		.required('Required')
-		.oneOf([Yup.ref('password')], 'Password does not match'),
+	email: Yup.string().email('Enter a valid email').required('Required'),
 });
 
-export default function SignIn(props) {
+export default function ForgotPassword(props) {
 	const classes = useStyles();
+
 	const [buttonText, setButtonText] = useState(false);
-	const user = isAuth();
 	const onSubmit = async (values, submitProps) => {
 		try {
-			submitProps.setSubmitting(false);
 			setButtonText(true);
-			const { currentPassword, password, passwordConfirm } = values;
-			const res = await axios.patch(`/users/updatePassword`, {
-				currentPassword,
-				password,
-				passwordConfirm,
+			const { email } = values;
+
+			const res = await axios.post(`/users/forgotPassword`, {
+				email,
 			});
-			authenticate(res, () => {
-				setButtonText(true);
-				submitProps.resetForm();
-				toast.success('Password changed successfully', {
-					position: 'top-center',
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: false,
-					draggable: false,
-					progress: undefined,
-				});
-				setButtonText(false);
+
+			setButtonText(true);
+			submitProps.resetForm();
+			toast.success('A password reset link is send to your account.', {
+				position: 'top-center',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: false,
+				draggable: false,
+				progress: undefined,
 			});
+			setButtonText(false);
 		} catch (err) {
 			if (err && err.response && err.response.data) {
 				toast.error(err.response.data.message, {
@@ -115,12 +101,6 @@ export default function SignIn(props) {
 		}
 	};
 
-	// if (redirectToReferrer) {
-	// 	if (user.role === 'user') return <Redirect to="/userdashboard" />;
-	// 	else return <Redirect to="/admindashboard" />;
-	// 	if (isAuth()) return <Redirect to="/" />;
-	// }
-
 	return (
 		<div>
 			<Header />
@@ -138,8 +118,11 @@ export default function SignIn(props) {
 				/>
 				<CssBaseline />
 				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
 					<Typography component="h1" variant="h5">
-						Update Password
+						Forgot Password
 					</Typography>
 					<Formik
 						initialValues={initialValues}
@@ -147,53 +130,25 @@ export default function SignIn(props) {
 						validationSchema={validationSchema}
 					>
 						{(props) => {
-							const { submitForm, isSubmitting, isValid } = props;
+							const { submitForm, isValid } = props;
 
 							return (
 								<Form className={classes.form}>
 									<Grid container spacing={2}>
-										<Grid className={classes.dis} item xs={12}>
-											<span>Current Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													name="currentPassword"
-													type="Password"
-													label="Current Password"
-												/>
-											</span>
-										</Grid>
-										<Grid className={classes.dis} item xs={12}>
-											<span>New Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													type="password"
-													label="New Password"
-													name="password"
-												/>
-											</span>
-										</Grid>
-										<Grid className={classes.dis} item xs={12}>
-											<span>Confirm Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													type="password"
-													label="Confirm Password"
-													name="passwordConfirm"
-												/>
-											</span>
+										<Grid item xs={12}>
+											<Field
+												fullWidth
+												variant="outlined"
+												component={TextField}
+												name="email"
+												type="email"
+												label="Email"
+											/>
 										</Grid>
 									</Grid>
 
 									<Button
+										fullWidth
 										variant="contained"
 										color="primary"
 										className={classes.submit}
@@ -203,7 +158,7 @@ export default function SignIn(props) {
 										{buttonText ? (
 											<CircularProgress size={24} color="secondary" />
 										) : (
-											'save changes'
+											'Submit'
 										)}
 									</Button>
 								</Form>

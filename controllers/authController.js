@@ -71,9 +71,9 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.authenticate = async (req, res, next) => {
-	// console.log(req.body, 12);
-	const { token } = req.body;
-
+	// console.log(req.params);
+	const { token } = req.params.token;
+	console.log(token);
 	if (!token) {
 		return next(new AllError('Invalid token.', 401));
 	}
@@ -216,12 +216,13 @@ exports.resetPassword = async (req, res, next) => {
 
 	const user = await User.findById(decode._id);
 	if (!user) {
-		return next(new AllError('token is expired or invalid', 401));
+		return next(new AllError('token is expired or invalid', 400));
 	}
 
 	user.password = password;
 	user.passwordConfirm = passwordConfirm;
-	await user.save();
+	const data = await user.save();
+	// console.log(data);
 	res.status(200).json({
 		message: 'password changed successfully',
 	});

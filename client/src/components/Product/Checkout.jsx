@@ -103,34 +103,11 @@ const Checkout = ({ total, isChange, setChange }) => {
 
 	return (
 		<div>
-			<TextField
-				style={{ backgroundColor: '#fff' }}
-				multiline
-				rows="3"
-				fullWidth
-				variant="outlined"
-				label="address"
-				name="address"
-				value={address}
-				onChange={(e) => setAddress(e.target.value)}
-			/>
 			<Loading open={open} />
-			{clientToken && totalItems() > 0 && (
-				<DropIn
-					style={{ margin: 0 }}
-					options={{
-						authorization: clientToken,
-						// paypal: {
-						// 	flow: 'vault',
-						// },
-					}}
-					onInstance={(instance) => setInstance(instance)}
-				/>
-			)}
 			{isAuth() ? (
-				<Button onClick={buy} className={styles.btn}>
-					Checkout
-				</Button>
+				<Link to="/checkout">
+					<Button className={styles.btn}>checkout</Button>
+				</Link>
 			) : (
 				// <Redirect to="/signin" />
 				<Link to="/signin">

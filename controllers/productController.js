@@ -33,9 +33,9 @@ exports.manageImage = async (req, res, next) => {
 
 	req.file.filename = `product-${req.user.id}-${Date.now()}.jpeg`;
 	await sharp(req.file.buffer)
-		.resize(200, 200, {
+		.resize(150, 150, {
 			fit: 'contain',
-			background: { r: 255, g: 255, b: 255, alpha: 0.5 },
+			background: { r: 255, g: 255, b: 255, alpha: 1 },
 		})
 		.toFormat('jpeg')
 		// .jpeg({ quality: 80 })

@@ -162,37 +162,9 @@ const ShoppingCartDemo = () => {
 					return (
 						<>
 							<CssBaseline />
-							<Fab
-								className={cx(styles.fab, open && styles.fabClose)}
-								color={'primary'}
-								onClick={() => setOpen('edgeSidebar', !open)}
-							>
-								{open ? <Close /> : <CreditCard />}
-							</Fab>
 
-							<DrawerSidebar
-								PaperProps={{ className: styles.edgeSidebarBody }}
-								sidebarId={'edgeSidebar'}
-							>
-								<Checkout setChange={setChange} isChange={isChange} total={total} />
-							</DrawerSidebar>
 							<Content>
-								<InsetContainer
-									rightSidebar={
-										<InsetSidebar
-											style={{ marginTop: '20px' }}
-											sidebarId={'insetSidebar'}
-											classes={{ paper: styles.sidebarBody }}
-										>
-											<Checkout
-												setChange={setChange}
-												isChange={isChange}
-												total={total}
-												style={{ marginTop: '20px' }}
-											/>
-										</InsetSidebar>
-									}
-								>
+								<InsetContainer>
 									<DailyCart setChange={setChange} isChange={isChange} items={items} />
 								</InsetContainer>
 							</Content>

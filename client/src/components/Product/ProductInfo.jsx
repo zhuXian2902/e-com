@@ -15,6 +15,7 @@ import AddReviews from './AddReviews';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange } from '@material-ui/core/colors';
 import Loading from './Loading';
+import { Redirect } from 'react-router-dom';
 
 const toastOptions = {
 	position: 'top-center',
@@ -63,6 +64,7 @@ export default function ProductInfo(props) {
 	const [change, setChange] = React.useState(false);
 	const [rating, setRating] = React.useState(0);
 	const [loading, setLoading] = React.useState(false);
+	const [redirect, setRedirect] = React.useState(false);
 
 	const handleClickOpen = (id) => {
 		setOpen(true);
@@ -145,8 +147,13 @@ export default function ProductInfo(props) {
 	const addToCart = () => {
 		addItem(product, () => {
 			toast.success('item added to cart successfully', toastOptions);
+			setRedirect(true);
 		});
 	};
+
+	if (redirect) {
+		return <Redirect to="/cart" />;
+	}
 
 	return (
 		<>

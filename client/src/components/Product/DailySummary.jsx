@@ -6,8 +6,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import Checkout from './Checkout';
+import { isAuth, getCookie } from './../../utils/helpers';
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
 	btn: {
@@ -49,30 +51,6 @@ const DailySummary = ({ total }) => {
 			spacing={2}
 		>
 			<Grid item xs={12} sm={5} md={4}>
-				<Grid container spacing={1}>
-					<Grid item xs={5}>
-						<Box align={'right'}>
-							<b className={styles.big}>Subtotal:</b>
-						</Box>
-					</Grid>
-					<Grid item xs={7}>
-						<Box px={2} align={'right'} className={styles.big}>
-							<span>₹{total}</span>
-						</Box>
-					</Grid>
-					<Grid item xs={5}>
-						<Box align={'right'}>
-							<b className={styles.big}>Shipping:</b>
-						</Box>
-					</Grid>
-					<Grid item xs={7}>
-						<Box px={2} align={'right'} className={styles.big}>
-							<span>{total > 0 ? '₹40' : '₹0'}</span>
-						</Box>
-					</Grid>
-				</Grid>
-				<br />
-				<Divider />
 				<br />
 				<Grid container spacing={1}>
 					<Grid item xs={5}>
@@ -82,10 +60,26 @@ const DailySummary = ({ total }) => {
 					</Grid>
 					<Grid item xs={7}>
 						<Box px={2} align={'right'} className={styles.large}>
-							<span>₹{total && total + 40}</span>
+							<span>₹{total}</span>
 						</Box>
 					</Grid>
 				</Grid>
+			</Grid>
+			<Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
+				{isAuth() ? (
+					<Link to="/checkout">
+						<Button className={styles.btn} endIcon={<KeyboardArrowRight />}>
+							Start checkout
+						</Button>
+					</Link>
+				) : (
+					// <Redirect to="/signin" />
+					<Link to="/signin">
+						<Button className={styles.btn} endIcon={<KeyboardArrowRight />}>
+							login to checkout
+						</Button>
+					</Link>
+				)}
 			</Grid>
 			<Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
 				<Link to="/shop">

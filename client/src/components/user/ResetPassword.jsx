@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,6 +19,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router-dom';
 import { authenticate, isAuth } from './../../utils/helpers';
+import { NavLink as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
 	alert: {
@@ -41,44 +43,57 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
-	dis: {
-		display: 'flex',
-		justifyContent: 'space-between',
-	},
 }));
 
 const initialValues = {
-	currentPassword: '',
-	password: '',
 	passwordConfirm: '',
+	password: '',
 };
 
 const validationSchema = Yup.object({
-	currentPassword: Yup.string().required('Required'),
-	password: Yup.string('').required('Required'),
-	passwordConfirm: Yup.string('')
+	password: Yup.string('')
+		.min(8, 'Password must contain at least 8 characters')
+		.required('Required'),
+	passwordConfirm: Yup.string()
 		.required('Required')
 		.oneOf([Yup.ref('password')], 'Password does not match'),
 });
 
-export default function SignIn(props) {
+export default function ResetPassword(props) {
 	const classes = useStyles();
+	const { match } = props;
+
+	const [token, setToken] = useState('');
 	const [buttonText, setButtonText] = useState(false);
+	const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+
 	const user = isAuth();
+
+	useEffect(() => {
+		let token = match.params.token;
+
+		if (token) {
+			setToken(token);
+		}
+	}, [match.params.token]);
+
 	const onSubmit = async (values, submitProps) => {
 		try {
 			submitProps.setSubmitting(false);
 			setButtonText(true);
-			const { currentPassword, password, passwordConfirm } = values;
-			const res = await axios.patch(`/users/updatePassword`, {
-				currentPassword,
+			const { password, passwordConfirm } = values;
+
+			const res = await axios.post(`/users/resetPassword`, {
+				token,
 				password,
 				passwordConfirm,
 			});
-			authenticate(res, () => {
-				setButtonText(true);
-				submitProps.resetForm();
-				toast.success('Password changed successfully', {
+
+			setButtonText(true);
+			submitProps.resetForm();
+			toast.success(
+				'Password changed successfully. Please Login with your new password',
+				{
 					position: 'top-center',
 					autoClose: 5000,
 					hideProgressBar: false,
@@ -86,11 +101,13 @@ export default function SignIn(props) {
 					pauseOnHover: false,
 					draggable: false,
 					progress: undefined,
-				});
-				setButtonText(false);
-			});
+				}
+			);
+			setButtonText(false);
+			setRedirectToReferrer(true);
 		} catch (err) {
 			if (err && err.response && err.response.data) {
+				console.log(err.response);
 				toast.error(err.response.data.message, {
 					position: 'top-center',
 					autoClose: 5000,
@@ -115,11 +132,9 @@ export default function SignIn(props) {
 		}
 	};
 
-	// if (redirectToReferrer) {
-	// 	if (user.role === 'user') return <Redirect to="/userdashboard" />;
-	// 	else return <Redirect to="/admindashboard" />;
-	// 	if (isAuth()) return <Redirect to="/" />;
-	// }
+	if (redirectToReferrer) {
+		return <Redirect to="/" />;
+	}
 
 	return (
 		<div>
@@ -138,8 +153,11 @@ export default function SignIn(props) {
 				/>
 				<CssBaseline />
 				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
 					<Typography component="h1" variant="h5">
-						Update Password
+						Reset Password
 					</Typography>
 					<Formik
 						initialValues={initialValues}
@@ -152,48 +170,30 @@ export default function SignIn(props) {
 							return (
 								<Form className={classes.form}>
 									<Grid container spacing={2}>
-										<Grid className={classes.dis} item xs={12}>
-											<span>Current Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													name="currentPassword"
-													type="Password"
-													label="Current Password"
-												/>
-											</span>
+										<Grid item xs={12}>
+											<Field
+												fullWidth
+												variant="outlined"
+												component={TextField}
+												type="password"
+												label="Password"
+												name="password"
+											/>
 										</Grid>
-										<Grid className={classes.dis} item xs={12}>
-											<span>New Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													type="password"
-													label="New Password"
-													name="password"
-												/>
-											</span>
-										</Grid>
-										<Grid className={classes.dis} item xs={12}>
-											<span>Confirm Password</span>
-											<span>
-												<Field
-													fullWidth
-													variant="outlined"
-													component={TextField}
-													type="password"
-													label="Confirm Password"
-													name="passwordConfirm"
-												/>
-											</span>
+										<Grid item xs={12}>
+											<Field
+												fullWidth
+												variant="outlined"
+												component={TextField}
+												type="password"
+												label="Confirm Password"
+												name="passwordConfirm"
+											/>
 										</Grid>
 									</Grid>
 
 									<Button
+										fullWidth
 										variant="contained"
 										color="primary"
 										className={classes.submit}
@@ -203,7 +203,7 @@ export default function SignIn(props) {
 										{buttonText ? (
 											<CircularProgress size={24} color="secondary" />
 										) : (
-											'save changes'
+											'Submit'
 										)}
 									</Button>
 								</Form>

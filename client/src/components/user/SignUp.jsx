@@ -120,6 +120,7 @@ export default function SignUp(props) {
 			setButtonText(false);
 		}
 	};
+	console.log(initialValues);
 
 	return (
 		<div>
@@ -150,7 +151,7 @@ export default function SignUp(props) {
 						validationSchema={validationSchema}
 					>
 						{(props) => {
-							const { submitForm, isSubmitting, isValid } = props;
+							const { submitForm, isSubmitting, isValid, onBlur } = props;
 
 							return (
 								<Form className={classes.form}>
@@ -163,7 +164,6 @@ export default function SignUp(props) {
 												autoComplete="name"
 												variant="outlined"
 												fullWidth
-												autoFocus
 											/>
 										</Grid>
 
@@ -197,12 +197,6 @@ export default function SignUp(props) {
 												label="Password Confirm"
 												type="password"
 												autoComplete="off"
-											/>
-										</Grid>
-										<Grid item xs={12}>
-											<FormControlLabel
-												control={<Checkbox value="allowExtraEmails" color="primary" />}
-												label="I agree with all the terms."
 											/>
 										</Grid>
 									</Grid>

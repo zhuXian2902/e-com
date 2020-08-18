@@ -19,6 +19,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from 'react-router-dom';
 import { authenticate, isAuth } from './../../utils/helpers';
+import { NavLink as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles((theme) => ({
 	alert: {
@@ -155,7 +157,6 @@ export default function SignIn(props) {
 										<Grid item xs={12}>
 											<Field
 												fullWidth
-												autoFocus
 												variant="outlined"
 												component={TextField}
 												name="email"
@@ -189,6 +190,18 @@ export default function SignIn(props) {
 											'Submit'
 										)}
 									</Button>
+									<Grid container>
+										<Grid item xs>
+											<Link component={RouterLink} to="/forgotPassword" variant="body2">
+												Forgot password?
+											</Link>
+										</Grid>
+										<Grid item>
+											<Link component={RouterLink} to="/signup" variant="body2">
+												{"Don't have an account? Sign Up"}
+											</Link>
+										</Grid>
+									</Grid>
 								</Form>
 							);
 						}}

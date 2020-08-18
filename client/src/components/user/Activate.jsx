@@ -14,7 +14,6 @@ const Activate = ({ match }) => {
 	const [values, setValues] = useState({
 		name: '',
 		token: '',
-		show: true,
 	});
 
 	const [buttonText, setButtonText] = useState(false);
@@ -35,7 +34,7 @@ const Activate = ({ match }) => {
 		try {
 			event.preventDefault();
 			setButtonText(true);
-			const res = await axios.post('/users/authenticate', { token });
+			const res = await axios.post(`/users/authenticate/${token}`);
 			authenticate(res, () => {
 				setButtonText(false);
 
@@ -66,20 +65,27 @@ const Activate = ({ match }) => {
 	};
 
 	const activationLink = () => (
-		<div className="text-center">
-			<h1 className="p-5">Hey {name}, Ready to activate your account?</h1>
-			<Button
-				type="submit"
-				fullWidth
-				variant="contained"
-				color="primary"
-				// className={classes.submit}
-				onClick={Submit}
-				disabled={buttonText}
-			>
-				{buttonText ? <CircularProgress size={24} color="secondary" /> : 'Submit'}
-			</Button>
-		</div>
+		<>
+			<Header />
+			<div className="text-center">
+				<h1 className="p-5">Hey {name}, Ready to activate your account?</h1>
+				<Button
+					type="submit"
+					fullWidth
+					variant="contained"
+					color="primary"
+					// className={classes.submit}
+					onClick={Submit}
+					disabled={buttonText}
+				>
+					{buttonText ? (
+						<CircularProgress size={24} color="secondary" />
+					) : (
+						'Activate'
+					)}
+				</Button>
+			</div>
+		</>
 	);
 
 	if (redirectToReferrer) {

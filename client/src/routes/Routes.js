@@ -7,8 +7,8 @@ import Header from '../components/Product/Header';
 import SignUp from '../components/user/SignUp';
 import SignIn from '../components/user/SignIn';
 import Activate from '../components/user/Activate';
-// import Forgot from "../components/Forgot";
-// import Reset from "../components/Reset";
+import ForgotPassword from '../components/user/ForgotPassword';
+import ResetPassword from '../components/user/ResetPassword';
 import UserDashboard from '../components/user/UserDashboard';
 import DashBoard from '../components/user/DashBoard';
 import AdminDashboard from '../components/user/AdminDashboard';
@@ -18,6 +18,7 @@ import AdminRoute from './AdminRoute';
 import { Route, Redirect } from 'react-router-dom';
 import Shop from './../components/Product/Shop';
 import Cart from './../components/Product/Cart';
+import Checkout2 from './../components/Product/Checkout2';
 import ProductInfo from './../components/Product/ProductInfo';
 
 const Routes = () => {
@@ -37,9 +38,27 @@ const Routes = () => {
 					<PublicRoute restricted={true} path="/signin" exact component={SignIn} />
 					<PublicRoute path="/shop" exact component={Shop} />
 					<PublicRoute path="/cart" exact component={Cart} />
+					<PublicRoute path="/checkout" exact component={Checkout2} />
 					<PublicRoute path="/products/:pid" exact component={ProductInfo} />
 					<PublicRoute restricted={false} path="/" exact component={Home} />
-					<PrivateRoute path="/dashboard" exact component={DashBoard} />
+					<PrivateRoute
+						restricted={true}
+						path="/dashboard"
+						exact
+						component={DashBoard}
+					/>
+					<PublicRoute
+						restricted={true}
+						path="/forgotPassword"
+						exact
+						component={ForgotPassword}
+					/>
+					<PublicRoute
+						restricted={true}
+						path="/auth/resetPassword/:token"
+						exact
+						component={ResetPassword}
+					/>
 				</Switch>
 			</BrowserRouter>
 		</div>
@@ -48,6 +67,7 @@ const Routes = () => {
 
 export default Routes;
 
+//
 // <PublicRoute
 // 					restricted
 // 					path="/auth/password/forgot"

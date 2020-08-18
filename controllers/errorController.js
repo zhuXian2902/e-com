@@ -30,10 +30,10 @@ const validationError = (err) => {
 };
 
 const tokenError = (err) =>
-	new AllError('Invalid token! Please login again', 401);
+	new AllError('Invalid token! Please login again', 400);
 
 const tokenExpiredError = (err) =>
-	new AllError('Token expired! Please login again', 401);
+	new AllError('Token expired! Please login again', 400);
 
 module.exports = (err, req, res, next) => {
 	err.statusCode = err.statusCode || 500;

@@ -8,6 +8,7 @@ import './all.css';
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 axios.interceptors.request.use((config) => {
+	// console.log(config);
 	const token = getCookie('token');
 	config.headers.Authorization = `Bearer ${token}`;
 	return config;
