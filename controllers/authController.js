@@ -71,8 +71,9 @@ exports.signup = async (req, res, next) => {
 };
 
 exports.authenticate = async (req, res, next) => {
-	// console.log(req.params);
-	const { token } = req.params.token;
+	console.log(req.params, 'hey 12');
+	console.log('hello');
+	const { token } = req.params;
 	console.log(token);
 	if (!token) {
 		return next(new AllError('Invalid token.', 401));

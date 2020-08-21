@@ -8,7 +8,7 @@ const catchAsync = require('../utils/catchAsync');
 const router = express.Router();
 
 router.post('/signup', catchAsync(authController.signup));
-router.post('/authenticate', catchAsync(authController.authenticate));
+router.post('/authenticate/:token', catchAsync(authController.authenticate));
 router.post('/login', catchAsync(authController.login));
 router.post('/forgotPassword', catchAsync(authController.forgotPassword));
 router.post('/resetPassword', catchAsync(authController.resetPassword));

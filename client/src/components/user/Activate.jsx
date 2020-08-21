@@ -51,15 +51,27 @@ const Activate = ({ match }) => {
 				setRedirectToReferrer(true);
 			});
 		} catch (err) {
-			toast.error(err.response.data.message, {
-				position: 'top-center',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
+			if (err && err.response && err.response.data) {
+				toast.error(err.response.data.message, {
+					position: 'top-center',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else {
+				toast.error('server is not running', {
+					position: 'top-center',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
 			setButtonText(false);
 		}
 	};
