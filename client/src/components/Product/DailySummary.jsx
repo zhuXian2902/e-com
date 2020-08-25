@@ -10,6 +10,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import Checkout from './Checkout';
 import { isAuth, getCookie } from './../../utils/helpers';
+import { totalItems, getCartItems, emptyCart } from './../../utils/cartHelpers';
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
 	btn: {
@@ -43,6 +44,8 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
 
 const DailySummary = ({ total }) => {
 	const styles = useStyles();
+	// const [disable, setDisable] = React.useState(false);
+	// if (getCartItems()[1] === 0) setDisable(true);
 	return (
 		<Grid
 			container
@@ -67,26 +70,25 @@ const DailySummary = ({ total }) => {
 			</Grid>
 			<Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
 				{isAuth() ? (
-					<Link to="/checkout">
-						<Button className={styles.btn} endIcon={<KeyboardArrowRight />}>
-							Start checkout
-						</Button>
-					</Link>
+					<Button
+						disabled={getCartItems()[1] === 0}
+						className={styles.btn}
+						endIcon={<KeyboardArrowRight />}
+					>
+						<Link to="/checkout">Start checkout</Link>
+					</Button>
 				) : (
 					// <Redirect to="/signin" />
-					<Link to="/signin">
-						<Button className={styles.btn} endIcon={<KeyboardArrowRight />}>
-							login to checkout
-						</Button>
-					</Link>
+
+					<Button className={styles.btn} endIcon={<KeyboardArrowRight />}>
+						<Link to="/signin">login to checkout</Link>
+					</Button>
 				)}
 			</Grid>
 			<Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
-				<Link to="/shop">
-					<Button className={styles.btn} startIcon={<KeyboardArrowLeft />}>
-						Continue Shopping
-					</Button>
-				</Link>
+				<Button className={styles.btn} startIcon={<KeyboardArrowLeft />}>
+					<Link to="/shop">Continue Shopping</Link>
+				</Button>
 			</Grid>
 		</Grid>
 	);

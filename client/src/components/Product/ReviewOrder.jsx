@@ -32,6 +32,12 @@ export default function Review({ values }) {
 		values.country,
 	];
 
+	const payments = [
+		{ name: 'Card number', detail: '4111-1111-1111-1111' },
+		{ name: 'Expiry date', detail: '11/22' },
+		{ name: 'CVV', detail: '111' },
+	];
+
 	return (
 		<React.Fragment>
 			<Typography variant="h6" gutterBottom>
@@ -60,6 +66,23 @@ export default function Review({ values }) {
 						{values.firstName} {values.lastName}
 					</Typography>
 					<Typography gutterBottom>{addresses.join(', ')}</Typography>
+				</Grid>
+				<Grid item container direction="column" xs={12} sm={6}>
+					<Typography variant="h6" gutterBottom className={classes.title}>
+						Pay with these Details
+					</Typography>
+					<Grid container>
+						{payments.map((payment) => (
+							<React.Fragment key={payment.name}>
+								<Grid item xs={4}>
+									<Typography gutterBottom>{payment.name}</Typography>
+								</Grid>
+								<Grid item xs={8}>
+									<Typography gutterBottom>{payment.detail}</Typography>
+								</Grid>
+							</React.Fragment>
+						))}
+					</Grid>
 				</Grid>
 			</Grid>
 		</React.Fragment>

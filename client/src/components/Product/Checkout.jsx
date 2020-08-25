@@ -45,9 +45,11 @@ const Checkout = ({ total, isChange, setChange }) => {
 	const [instance, setInstance] = useState({});
 	const [address, setAddress] = useState();
 	const [open, setOpen] = React.useState(false);
+	const [disable, setDisable] = React.useState(false);
 	const styles = useStyles();
 	// const id = isAuth() && isAuth().user._id;
 	// const token = getCookie('token');
+	if (getCartItems()[0].length === 0) setDisable(true);
 
 	const getToken = async () => {
 		try {
@@ -100,14 +102,14 @@ const Checkout = ({ total, isChange, setChange }) => {
 	useEffect(() => {
 		getToken();
 	}, []);
-
+	console.log(disable);
 	return (
 		<div>
 			<Loading open={open} />
 			{isAuth() ? (
-				<Link to="/checkout">
-					<Button className={styles.btn}>checkout</Button>
-				</Link>
+				<Button disabled={disable} className={styles.btn}>
+					<Link to="/checkout"> checkout</Link>
+				</Button>
 			) : (
 				// <Redirect to="/signin" />
 				<Link to="/signin">
