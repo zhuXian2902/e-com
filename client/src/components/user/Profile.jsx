@@ -97,7 +97,8 @@ export default function SignUp(props) {
 			initialValues.name = userData.name;
 			initialValues.email = userData.email;
 			initialValues.image = userData.image;
-			initialValues.address = userData.address ? userData.address : '';
+			initialValues.address =
+				userData.address !== 'undefined' ? userData.address : '';
 			setUser(data.data.data);
 		} catch (err) {
 			if (err && err.response && err.response.data) {

@@ -10,7 +10,6 @@ const reviewRouter = require('./routes/reviewRoutes');
 const productRouter = require('./routes/productRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const orderRouter = require('./routes/orderRoutes');
-const Product = require('./models/productModel');
 const AllError = require('./utils/error');
 const errorHandler = require('./controllers/errorController');
 const cors = require('cors');

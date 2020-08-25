@@ -30,7 +30,7 @@ exports.getAllReviews = async (req, res, next) => {
 	let filter = {};
 	if (req.params.pid) filter = { product: req.params.pid };
 	const data = await Review.find(filter).populate('user'); //.populate('product');
-
+	// console.log(data);
 	res.status(200).json({
 		status: 'success',
 		// size: data.length ? data.length : 0,

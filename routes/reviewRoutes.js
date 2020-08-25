@@ -8,8 +8,6 @@ const router = express.Router({ mergeParams: true });
 
 router.get('/ratings', catchAsync(reviewController.ratingsAverage));
 
-router.use(authController.protect);
-
 router
 	.route('/')
 	.get(catchAsync(reviewController.getAllReviews))
@@ -18,6 +16,7 @@ router
 		catchAsync(reviewController.createReview)
 	);
 
+router.use(authController.protect);
 router
 	.route('/:id')
 	.get(reviewController.getReview)

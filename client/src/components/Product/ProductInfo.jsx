@@ -11,6 +11,7 @@ import Header from './Header';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { addItem } from './../../utils/cartHelpers';
+import { isAuth } from './../../utils/helpers';
 import AddReviews from './AddReviews';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange } from '@material-ui/core/colors';
@@ -55,7 +56,7 @@ export default function ProductInfo(props) {
 	// console.log(props);
 	const pid = props.match.params.pid;
 	const url = process.env.REACT_APP_SERVER_IMAGE_URL;
-	// const imageUrl = `${url}/products/${product.image}`;
+	const imageUrl = `${url}/users`;
 	const [product, setProduct] = useState({});
 	const [similarProducts, setSimilarProducts] = useState([]);
 	const [reviews, setReviews] = useState([]);
@@ -67,7 +68,11 @@ export default function ProductInfo(props) {
 	const [redirect, setRedirect] = React.useState(false);
 
 	const handleClickOpen = (id) => {
-		setOpen(true);
+		if (isAuth()) {
+			setOpen(true);
+		} else {
+			toast.info('Please signin to give feedback', toastOptions);
+		}
 	};
 
 	const handleClose = () => {
@@ -107,6 +112,10 @@ export default function ProductInfo(props) {
 				setLoading(true);
 				const res = await axios.get(`/products/${pid}/reviews`);
 				setReviews(res.data.data);
+				if (res.data.data.length === 0) {
+					setRating(0);
+					setNum(0);
+				}
 				setLoading(false);
 				// console.log(res.data.data);
 			} catch (err) {
@@ -121,13 +130,14 @@ export default function ProductInfo(props) {
 	};
 
 	const getRatings = async (pid) => {
-		if (pid !== undefined) {
+		{
 			try {
 				setLoading(true);
+
 				const res = await axios.get(`/products/${pid}/reviews/ratings`);
 				setRating(res.data.stats[0].avgRating);
 				setNum(res.data.stats[0].num);
-				// console.log(res.data.stats);
+				// console.log(res.data);
 				setLoading(false);
 			} catch (err) {
 				if (err && err.response && err.response.data) {
@@ -254,16 +264,18 @@ export default function ProductInfo(props) {
 			)}
 
 			<hr />
-			<Typography
-				variant="h4"
-				style={{
-					display: 'flex',
-					justifyContent: 'center',
-					paddingBottom: '20px',
-				}}
-			>
-				Product Reviews
-			</Typography>
+			{reviews.length > 0 && (
+				<Typography
+					variant="h4"
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						paddingBottom: '20px',
+					}}
+				>
+					Product Reviews
+				</Typography>
+			)}
 			<Container className={classes.cardGrid} maxWidth="md">
 				<Grid item>
 					{reviews.map((review) => (
@@ -271,7 +283,7 @@ export default function ProductInfo(props) {
 							<Grid item sm={3} style={{ display: 'flex', justifyContent: 'center' }}>
 								<Avatar
 									alt={review.user.name}
-									src="/broken-image.jpg"
+									src={`${imageUrl}/${review.user.image}`}
 									className={classes.orange}
 								/>
 							</Grid>
@@ -294,7 +306,6 @@ export default function ProductInfo(props) {
 					))}
 				</Grid>
 			</Container>
-
 			{open && (
 				<AddReviews
 					change={change}
